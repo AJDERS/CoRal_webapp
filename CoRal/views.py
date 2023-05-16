@@ -1,3 +1,5 @@
+import pandas as pd
+from pathlib import Path
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from .models import Recording
@@ -9,18 +11,13 @@ import random
 
 def index(request):
     template = loader.get_template('index.html')
-    with open(settings.MEDIA_ROOT + "transcriptions.txt", 'r', encoding="utf-8") as f:
-        django_file = File(f)
-        transcriptions = django_file.readlines()
-
+    processed_articles = pd.read_csv(Path(settings.MEDIA_ROOT) / "processed_articles.csv")
+    transcriptions = processed_articles["text"].tolist()
     transcriptions = [line.rstrip() for line in transcriptions]
-
     random.shuffle(transcriptions)
-
     content = {
         "transcriptions": transcriptions[:2000],
     }
-
     return HttpResponse(template.render(content, request))
 
 

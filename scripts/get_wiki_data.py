@@ -1,28 +1,23 @@
-import os
-import sys
 import torch
+import re
+from pathlib import Path
+import pandas as pd
 from datasets import load_dataset
 from tqdm import tqdm
-from transformers import pipeline, AutoTokenizer
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # Load the Danish subset of the Wikipedia dataset from Hugging Face
 dataset = load_dataset("olm/wikipedia", language="da", date="20230320", split="train")
-
-# Initialize the sentiment classification model and tokenizer
-model_name = "alexandrainst/da-offensive-detection-base"
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Using device: {device}")
-model = pipeline("sentiment-analysis", model=model_name)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-word_tokenizer = AutoTokenizer.from_pretrained("vesteinn/DanskBERT")
+tokenizer = AutoTokenizer.from_pretrained("juliensimon/xlm-v-base-language-id")
+model = AutoModelForSequenceClassification.from_pretrained("juliensimon/xlm-v-base-language-id")
 
 def check_sent(text):
     # Check if chunk contains two whitespace characters in a row, which indicates a new paragraph or section in the text
     if "  " in text:
         return False
 
-    # Check if the chunk is more than 6 tokens long and less than 40 tokens long
-    if len(tokenizer.tokenize(text)) < 8 or len(tokenizer.tokenize(text)) > 25:
+    # Check if the chunk is more than 6 tokens long and less than 25 words long
+    if len(text.split()) < 6 or len(text.split()) > 25:
         return False
 
     # Check if the chunk contains a URL
@@ -36,70 +31,61 @@ def check_sent(text):
     
     return True
 
-# Define a function to split the text into chunks that take at most 10 seconds to read out loud
 def chunk_text(text):
     speaking_rate = 120  # average speaking rate in words per minute
     max_duration = 10  # maximum duration of each chunk in seconds
     chunk_texts = []
     text = text.replace("\n", " ")
     # Split the text into sentences
-    for sent in text.split(". "):
-        duration = len(tokenizer.tokenize(sent)) / speaking_rate * 60
+
+    for sent in re.split("[.](?=\s[A-ZÆØÅ])", text):
+        duration = len(sent.split()) / speaking_rate * 60
         if duration > max_duration:
-            # Split the sentence on ","
-            for sub_sent in sent.split(", "):
-                if check_sent(sub_sent):
-                    chunk_texts.append(sub_sent.strip().capitalize())
+            continue
         else:
             if check_sent(sent):
-                chunk_texts.append(sent.strip().capitalize())
+                chunk_texts.append(sent.strip())
     return chunk_texts
 
-# Process each article in the dataset
-
-# Keep track of the number of articles processed
-# read file article_count.txt
-# if file does not exist, create it and set article_count to 0
-# else, set article_count to the number in the file
 def main():
-    with open("scripts/article_count.txt", "r") as f:
-        processed_article_count = int(f.read())
     
-    current_article_count = 0
+    # Check if processed_articles.csv exists
+    if not Path("processed_articles.csv").exists():
+        # Create the file and set the article count to 0
+        processed_articles = pd.DataFrame(columns=["article_id", "url", "title", "text"]).to_csv("processed_articles.csv", index=False)
+        processed_article_ids = []
+    else:
+        # Read the file and get the article ids of the articles that have already been processed
+        processed_articles = pd.read_csv("processed_articles.csv")
+        processed_article_ids = processed_articles["article_id"].tolist()
+    
     for article in tqdm(dataset):
-        # Skip the article if it has already been processed
-        if current_article_count < processed_article_count:
-            current_article_count += 1
-            continue
-        
-        chunks_to_keep = []
-        # Split the text into chunks
-        chunks = chunk_text(article["text"])
-    
-        # Classify the sentiment of each chunk
-        results = model(chunks)
-    
-        # Keep the chunks that are not offensive
-        for chunk, result in zip(chunks, results):
-            if not result["label"] == "Offensive":
-                # Keep the chunk if it is not offensive
-                chunks_to_keep.append(chunk)
-        
-        # Save the chunks to a text file
-        with open("scripts/da_wiki.txt", "a") as f:
-            f.write("\n".join(chunks_to_keep))
-            f.close()
-        
-        # Increment the article count and save it to the file
-        processed_article_count += 1
-        with open("scripts/article_count.txt", "w") as f:
-            f.write(str(processed_article_count))
-            f.close()
 
-        # Restart the script if it has processed 100 articles
-        if processed_article_count % 1000 == 0:
-            print("Restarting script...")
-            os.execv(sys.executable, ['python3'] + sys.argv)
+        # Check if the article has already been processed
+        if article["id"] in processed_article_ids:
+            continue
+
+        # Chunk the text
+        chunks = chunk_text(article["text"])
+
+        # Check if the article is in Danish
+        with torch.no_grad():
+            n_chunks = 5 if len(chunks) >= 5 else len(chunks)
+            if n_chunks == 0:
+                continue
+            logits = model(**tokenizer(chunks[0:n_chunks], padding=True, truncation=True, max_length=512, return_tensors="pt")).logits
+            predicted_class_ids = torch.argmax(logits, dim=-1).tolist()
+            predicted_classes = [model.config.id2label[predicted_class_ids] for predicted_class_ids in predicted_class_ids]
+            if any([predicted_class != "Danish" for predicted_class in predicted_classes]):
+                continue
+
+        # Create records of the text chunks
+        records = []
+        for chunk in chunks:
+            records.append({"article_id": article["id"], "url": article["url"], "title": article["title"], "text": chunk})
+
+        # Save the records to a csv file
+        pd.DataFrame(records).to_csv("processed_articles.csv", mode="a", header=False, index=False)
 
 
 if __name__ == '__main__':
