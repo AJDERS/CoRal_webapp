@@ -161,8 +161,7 @@ function createPlayer(event) {
         $('#record-button').text("Ny optagelse");
     });
 }
-
-$('#record-button').on('click', function () {
+function record() {
     if (isSafari) {
         if (typeof recorder === 'undefined' || recorder.getState() === "stopped") {
             if (!microphone) {
@@ -216,7 +215,8 @@ $('#record-button').on('click', function () {
             }
         }
     }
-});
+}
+$('#record-button').on('click', record);
 
 function submitRecording() {
     var hasRecorded = false;
@@ -270,9 +270,8 @@ function submitRecording() {
             data: data,
             success: function (data) {
                 if (data.success) {
-                    alert("Succes! Tak for dit bidrag. Du er velkommen til at sende os flere optagelser!");
                     numOfRecordings += 1;
-                    if (numOfRecordings % 20 === 0) {
+                    if (numOfRecordings % 30 === 0) {
                         alert("Tag en kort pause, og drik en tår vand.")
                     }
                     current_trans = transcriptions.pop();

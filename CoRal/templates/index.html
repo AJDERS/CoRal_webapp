@@ -690,7 +690,7 @@
             </h1>
             <p id="tekst-beskrivelse">
                 Optag nedenstående sætning. Når du er tilfreds med din optagelse, så trykker du på "send optagelse"
-                knappen.
+                knappen. Du kan bruge genvejsknapperne til at styre optagelsen, "R" for at starte og stoppe optagelse, og "S" for at indsende optagelsen.
             </p>
             <blockquote>
                 <p>
@@ -713,10 +713,11 @@
 
         <section class="container" id="info">
             <h1 class="">
-                Info
+                Information om projekt
             </h1>
             <p>
-                Blablabla
+                Alexandra Instituttet er sammen med Københavns Universitet, Digitaliseringsstyrelsen og virksomhederne Corti og Alvenir i gang med et projekt, hvor visionen er at skabe grundlag for, at dansk sprogteknologi (kunstig intelligens) kan komme op blandt de førende lande i Europa inden for taleteknologi. <br> <br> Projektet hedder “Danish Conversational and Read-aloud Speech Dataset” og forkortes “CoRal”. <br><br>
+                Målet er at producere 1000–1500 timers taledata fordelt på to taletyper: samtale og oplæsning, der indeholder en bred repræ-sentation af danske dialekter og talestile. <br>
             </p>
 
         </section>
@@ -756,6 +757,21 @@
 
     <script>
         {% include 'coral.js' %}
+    </script>
+    <script>
+        document.onkeyup = function(e) {
+          if (e.which == 82) {
+            /* When the button is clicked use the record function from coral.js */
+            record();
+          } else if (e.which == 83) {
+            /* When the button is clicked use the stop function from coral.js */
+            if (!accepted_legal) {
+                modal.style.display = "block";
+            } else {
+                submitRecording();
+            }
+          }
+        };
     </script>
 </body>
 
