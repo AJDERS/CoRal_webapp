@@ -155,31 +155,31 @@
                 <ul>
                     <form id="metadata_form">
                         <b>Dimensioner af optagelsesrummet (højde,bredde,længde)</b> <input type="text"
-                            name="room_dimensions" value="Ikke valgt" required> <br>
-                        <b>Adresse på optagelsesstedet</b> <input type="text" name="address" value="Ikke valgt"
+                            name="room_dimensions" id="room_dimensions" onkeyup='saveValue(this);' value="Ikke valgt" required> <br>
+                        <b>Adresse på optagelsesstedet</b> <input type="text" name="address" id="address" onkeyup='saveValue(this);' value="Ikke valgt"
                             required> <br>
-                        <b>Baggrundsstøj (dB)</b> <input type="number" name="background_noise" value="Ikke valgt"
+                        <b>Baggrundsstøj (dB)</b> <input type="number" id="background_noise" onkeyup='saveValue(this);' name="background_noise" value="Ikke valgt"
                             required>
                         <br>
                         <label for="noise">Støj type</label>
-                        <select name="noise" id="noise">
+                        <select name="noise" onkeyup='saveValue(this);' id="noise">
                             <option value="ikke_valgt">Ikke valgt</option>
                             <option value="ingen">Ingen</option>
                             <option value="trafik">Trafik</option>
                             <option value="human">Mennesker</option>
                         </select>
-                        <b>Name</b> <input type="text" name="name" value="Ikke valgt" required> <br>
-                        <b>Email</b> <input type="email" name="email" value="Ikke valgt" required> <br>
-                        <b>Alder</b> <input type="number" name="age" min="0" max="100" required> <br>
+                        <b>Name</b> <input type="text" name="name" id="name" onkeyup='saveValue(this);' value="Ikke valgt" required> <br>
+                        <b>Email</b> <input type="email" name="email" id="email" onkeyup='saveValue(this);' value="Ikke valgt" required> <br>
+                        <b>Alder</b> <input type="number" name="age" id="number" onkeyup='saveValue(this);' min="0" max="100" required> <br>
                         <label for="gender">Køn</label>
-                        <select name="gender" id="gender">
+                        <select name="gender" onkeyup='saveValue(this);' id="gender">
                             <option value="ikke_valgt">Ikke valgt</option>
                             <option value="male">Mand (inklusiv trans-mand)</option>
                             <option value="female">Kvinde (inklusiv trans-kvinde)</option>
                             <option value="nonbinary">Non-binær</option>
                         </select>
                         <label for="dialect">Dialekt</label>
-                        <select name="dialect" id="dialect">
+                        <select name="dialect" onkeyup='saveValue(this);' id="dialect">
                             <option value="ikke_valgt">Ikke valgt</option>
                             <optgroup label="Sjællandsk">
                                 <option value="Sjællandsk">Sjællandsk</option>
@@ -252,7 +252,7 @@
                             </optgroup>
                         </select>
                         <label for="Modersmål">Modersmål</label>
-                        <select name="accent" id="accent">
+                        <select name="accent" onkeyup='saveValue(this);' id="accent">
                             <option value="Afrikaans">Afrikaans</option>
                             <option value="Albansk">Albansk</option>
                             <option value="Arabisk">Arabisk</option>
@@ -437,14 +437,14 @@
                             <option value="Øvresorbisk">Øvresorbisk</option>
                         </select>
                         <br>
-                        <b>Hvilke sprog taler du</b> <input type="text" name="languages" required>
+                        <b>Hvilke sprog taler du</b> <input type="text" id="languages" onkeyup='saveValue(this);' name="languages" required>
                         <br>
-                        <b>Postnummer (hvor har du gået i folkeskole)</b> <input type="text" name="zipcode_school"
+                        <b>Postnummer (hvor har du gået i folkeskole)</b> <input type="text" onkeyup='saveValue(this);' id="zipcode_school" name="zipcode_school"
                             value="Ikke gået i folkeskole i Danmark" required> <br>
-                        <b>Postnummer (hvor du er vokset op)</b> <input type="text" name="zipcode_birth"
+                        <b>Postnummer (hvor du er vokset op)</b> <input type="text" name="zipcode_birth" id="zipcode_birth" onkeyup='saveValue(this);'
                             value="Ikke født i Danmark" required> <br>
                         <label for="birth_place">Fødselssted</label>
-                        <select name="birth_place" id="birth_place">
+                        <select name="birth_place" onkeyup='saveValue(this);' id="birth_place">
                             <option value="Ikke valgt">Ikke valgt</option>
                             <option value="Afghanistan">Afghanistan</option>
                             <option value="Albania">Albania</option>
@@ -644,7 +644,7 @@
                             <option value="Zimbabwe">Zimbabwe</option>
                         </select>
                         <label for="education">Uddannelsesniveau</label>
-                        <select name="education" id="education">
+                        <select name="education" onkeyup='saveValue(this);' id="education">
                             <option value="ikke_valgt">Ikke valgt</option>
                             <option value="grundskole">Grundskole</option>
                             <option value="gymnasiel_uddannelse">Gymnasiele Uddannelse</option>
@@ -657,7 +657,7 @@
                             <option value="bachelor_uddannelse">Bachelor Uddannelse</option>
                             <option value="phd_og_forskeruddannelse">Ph.d. og forskeruddannelse</option>
                         </select>
-                        Beskæftigelse <input type="text" name="occupation" value="Ikke valgt" required> <br>
+                        Beskæftigelse <input type="text" name="occupation" onkeyup='saveValue(this);' id="occupation" value="Ikke valgt" required> <br>
 
                     </form>
                 </ul>
@@ -758,6 +758,40 @@
           }
         };
     </script>
+    <script type="text/javascript">
+        document.getElementById("room_dimensions").value = getSavedValue("room_dimensions");
+        document.getElementById("background_noise").value = getSavedValue("background_noise")
+        document.getElementById("noise").value = getSavedValue("noise")
+        document.getElementById("address").value = getSavedValue("address")
+        document.getElementById("name").value = getSavedValue("name")
+        document.getElementById("email").value = getSavedValue("email")
+        document.getElementById("number").value = getSavedValue("number")
+        document.getElementById("gender").value = getSavedValue("gender")
+        document.getElementById("dialect").value = getSavedValue("dialect")
+        document.getElementById("accent").value = getSavedValue("accent")
+        document.getElementById("languages").value = getSavedValue("languages")
+        document.getElementById("zipcode_school").value = getSavedValue("zipcode_school")
+        document.getElementById("zipcode_birth").value = getSavedValue("zipcode_birth")
+        document.getElementById("birth_place").value = getSavedValue("birth_place")
+        document.getElementById("education").value = getSavedValue("education")
+        document.getElementById("occupation").value = getSavedValue("occupation")
+        /* Here you can add more inputs to set value. if it's saved */
+
+        //Save the value function - save it to localStorage as (ID, VALUE)
+        function saveValue(e){
+            var id = e.id;  // get the sender's id to save it . 
+            var val = e.value; // get the value. 
+            localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override . 
+        }
+
+        //get the saved value function - return the value of "v" from localStorage. 
+        function getSavedValue  (v){
+            if (!localStorage.getItem(v)) {
+                return "";// You can change this to your defualt value. 
+            }
+            return localStorage.getItem(v);
+        }
+</script>
 </body>
 
 </html>
