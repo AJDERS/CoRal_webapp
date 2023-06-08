@@ -749,7 +749,9 @@
         document.onkeyup = function(e) {
           if (e.which == 82) {
             /* When the button is clicked use the record function from coral.js */
-            record();
+            if (accepted_legal) {
+                record();
+            } 
           } else if (e.which == 83) {
             /* When the button is clicked use the stop function from coral.js */
             if (!accepted_legal) {
