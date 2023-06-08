@@ -14,7 +14,7 @@ Note, you should definetly use chrome or firefox!
 
 ### Getting started
 
-* Run python manage.py migrate (this will create the db)
+* Run python manage.py migrate --run-syncdb (this will create the db)
 * (optional) Run python manage.py createsuperuser (super user if you want to access the admin side / monitoring)
 * Run python manage.py runserver (this will launch the wepapp on port <http://127.0.0.1:8000/>
 
