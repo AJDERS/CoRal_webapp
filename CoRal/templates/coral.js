@@ -304,13 +304,6 @@ span.onclick = function () {
     modal.style.display = "none";
 };
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-};
-
 $('#submitAudio').on('click', function () {
     if (!accepted_legal) {
         modal.style.display = "block";
