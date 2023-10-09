@@ -10,6 +10,7 @@ else
     exit 1
 fi
 
+shopt -s extglob
 cd ~/Desktop/CoRal_webapp/audio_files
 rm -v !("processed_articles.csv")
 cd ~/Desktop/CoRal_webapp
