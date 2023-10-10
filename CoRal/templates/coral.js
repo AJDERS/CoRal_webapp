@@ -218,6 +218,14 @@ function record() {
 }
 $('#record-button').on('click', record);
 
+function stopRecording() {
+    if (isSafari) {
+        recorder.stopRecording(stopRecordingCallback);
+    } else {
+        player.record().stop();
+    }
+}
+
 function submitRecording() {
     var hasRecorded = false;
     if (isSafari) {
