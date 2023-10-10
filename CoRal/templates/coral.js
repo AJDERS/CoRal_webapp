@@ -471,8 +471,8 @@ function checkZipcode(zipcode) {
         alert("Postnummer skal være et tal")
         return false;
     }
-    if (zipcode < 999 || zipcode > 10000) {
-        alert("Postnummer skal være på 4 cifre, og imellem 1000 og 9999");
+    if (zipcode < 999 || zipcode > 99998) {
+        alert("Postnummer skal være på 4 cifre (5 for Tyske postnumre), og imellem 1000 og 99998");
         return false;
     } else {
         return true;
