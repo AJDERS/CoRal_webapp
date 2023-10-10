@@ -261,10 +261,10 @@ function submitRecording() {
         data.append('background_noise', form.background_noise.value);
         data.append('noise', form.noise.value);
         data.append('age', form.age.value);
-        data.append('languages', form.languages.value);
+        data.append('languages', localStorage.getItem('languages'));
         data.append('dialect', form.dialect.value);
         data.append('gender', form.gender.value)
-        data.append('accent', form.accent.value)
+        data.append('accent', localStorage.getItem('accent'));
         data.append('zipcode_school', form.zipcode_school.value)
         data.append('zipcode_birth', form.zipcode_birth.value)
         data.append('birth_place', form.birth_place.value)
