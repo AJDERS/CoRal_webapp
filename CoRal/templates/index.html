@@ -87,9 +87,10 @@
             cursor: pointer;
         }
 
-        /* change player background color */
+        /* change player background color and hide */
         #myAudio {
             background-color: #fff6ee;
+            display: none;
         }
 
         .center {
@@ -103,37 +104,6 @@
 
 <body>
     <main class="wrapper">
-        <nav class="navigation" style="z-index: 999">
-            <section class="container">
-                <a class="navigation-title" href="#home">
-                    <h1 class="title">CoRal</h1>
-                </a>
-                <ul class="navigation-list float-right">
-                    <li class="navigation-item">
-                        <a class="navigation-link" href="#info" data-popover>Info</a>
-                    </li>
-                    <li class="navigation-item">
-                        <a class="navigation-link" href="#kontakt" data-popover>Kontakt</a>
-                    </li>
-                </ul>
-            </section>
-        </nav>
-        <header class="header" id="home">
-            <section class="container">
-                <h1>
-                    CoRal
-                </h1>
-                <p class="description">
-                    CoRal er et projekt, som har til formål at indsamle dansk dialekt data, som kan bruges til at
-                    træne forskellige tale AI modeller.
-                </p>
-
-                <p><a href="#info"> Læs mere om projektet </a></p>
-                <p><a href="#recording"> Start med at bidrage </a></p>
-            </section>
-
-        </header>
-
         <div id="myModal" class="modal">
 
             <!-- Modal content -->
@@ -676,8 +646,7 @@
                 Data indsamling
             </h1>
             <p id="tekst-beskrivelse">
-                Optag nedenstående sætning. Når du er tilfreds med din optagelse, så trykker du på "send optagelse"
-                knappen. Du kan bruge genvejsknapperne til at styre optagelsen, "R" for at starte og stoppe optagelse, og "S" for at indsende optagelsen.
+                Optag nedenstående sætning. Hold "r" inde for at optage. Når du slipper "r" stopper optagelsen, og du vil få en ny sætning.
             </p>
             <blockquote>
                 <p>
@@ -693,51 +662,8 @@
 
             <audio id="myAudio" class="video-js vjs-default-skin center"></audio>
             </br>
-            <button id="record-button" class="button">Ny optagelse</button>
-            <input id="submitAudio" class="button" type="submit" value="Send optagelse">
-
+            <div id="record-progress", style="color: #c16130; font-weight: bold; font-size: large;"><h2></h2></div>
         </section>
-
-        <section class="container" id="info">
-            <h1 class="">
-                Information om projekt
-            </h1>
-            <p>
-                Alexandra Instituttet er sammen med Københavns Universitet, Digitaliseringsstyrelsen og virksomhederne Corti og Alvenir i gang med et projekt, hvor visionen er at skabe grundlag for, at dansk sprogteknologi (kunstig intelligens) kan komme op blandt de førende lande i Europa inden for taleteknologi. <br> <br> Projektet hedder “Danish Conversational and Read-aloud Speech Dataset” og forkortes “CoRal”. <br><br>
-                Målet er at producere 1000–1500 timers taledata fordelt på to taletyper: samtale og oplæsning, der indeholder en bred repræ-sentation af danske dialekter og talestile. <br>
-            </p>
-
-        </section>
-        <section class="container" id="kontakt">
-            <h1 class="">
-                Kontakt
-            </h1>
-            <p>
-                Er du interesseret i at høre mere om projektet? Eller har du spørgsmål til indsamlingen af data? Så kan
-                du kontakte os på en af følgende emails.
-            </p>
-            <p>
-                <i>Anders Jess Pedersen</i> </br> <a
-                    href="mailto: anders.j.pedersen@alexandra.dk">anders.j.pedersen@alexandra.dk</a>
-            </p>
-            <p>
-                <i>Dan Saatrup Nielsen</i> </br> <a href="mailto: dan.nielsen@alexandra.dk">dan.nielsen@alexandra.dk</a>
-            </p>
-            <div class="row">
-                <div class="column">
-                    <p>
-
-                    </p>
-                    <p>
-
-                    </p>
-                </div>
-                <div class="column"></div>
-                <div class="column"></div>
-
-            </div>
-        </section>
-
     </main>
 
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>

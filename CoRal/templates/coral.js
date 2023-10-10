@@ -139,7 +139,9 @@ function createPlayer(event) {
             RecordRTC.version;
         videojs.log(msg);
     });
-
+    player.on('ready', function() {
+        player.record().getDevice();
+    });
     // error handling
     player.on('deviceError', function () {
         console.log('device error:', player.deviceErrorCode);
@@ -150,7 +152,7 @@ function createPlayer(event) {
     // user clicked the record button and started recording
     player.on('startRecord', function () {
         console.log('started recording!');
-        $('#record-button').text("Stop ");
+        $('#record-progress').text("Optager... ");
     });
     // user completed recording and stream is available
     player.on('finishRecord', function () {
@@ -158,7 +160,7 @@ function createPlayer(event) {
         // can be downloaded by the user, stored on server etc.
         console.log('finished recording: ', player.recordedData);
         oldRecording = false;
-        $('#record-button').text("Ny optagelse");
+        $('#record-progress').text("");
     });
 }
 function record() {
